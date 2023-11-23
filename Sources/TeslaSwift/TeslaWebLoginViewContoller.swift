@@ -11,6 +11,7 @@ import WebKit
 
 public class TeslaWebLoginViewController: UIViewController {
     var webView = WKWebView()
+    public var didFinish = false
     private var continuation: CheckedContinuation<URL, Error>?
 
     required init?(coder: NSCoder) {
@@ -44,6 +45,10 @@ extension TeslaWebLoginViewController: WKNavigationDelegate {
         } else {
             decisionHandler(.allow)
         }
+    }
+    
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        didFinish = true
     }
 
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {

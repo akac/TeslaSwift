@@ -43,8 +43,20 @@ public enum TeslaAPI {
 open class TeslaSwift {
     open var debuggingEnabled = false
 
-    open fileprivate(set) var token: AuthToken?
-    open fileprivate(set) var partnerToken: AuthToken?
+//    static private var _logger: Any? = nil
+//    @available(iOS 14.0, macOS 11.0, *)
+//    static public var logger: Logger? {
+//        get {
+//            guard let _logger else { return nil }
+//            return _logger as? Logger
+//        }
+//        set {
+//            _logger = newValue
+//        }
+//    }
+    
+    @Published open fileprivate(set) var token: AuthToken?
+    @Published open fileprivate(set) var partnerToken: AuthToken?
 
     open fileprivate(set) var email: String?
     fileprivate var password: String?
@@ -690,9 +702,17 @@ extension TeslaSwift {
 		return request
 	}
 
-    private func logDebug(_ format: String, debuggingEnabled: Bool) {
-        if debuggingEnabled {
-            logger.debug("\(format)")
+    func logDebug(_ format: String, debuggingEnabled: Bool) {
+        if #available(iOS 14.0, macOS 11.0, *) {
+            if debuggingEnabled {
+                logger.notice("\(format, privacy: .public)")
+            } else {
+                logger.trace("\(format)")
+            }
+        } else {
+            if debuggingEnabled {
+                print(format)
+            }
         }
     }
 }
